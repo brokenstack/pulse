@@ -8,19 +8,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import pw.alk.pulse.R
 import pw.alk.pulse.ui.components.BackButton
 import pw.alk.pulse.ui.components.BaseUserContent
 import pw.alk.pulse.ui.components.IconButton
+import pw.alk.pulse.ui.components.PostDivider
 import pw.alk.pulse.ui.nav.Screen
 import pw.alk.pulse.ui.screens.SharedViewModel
+import pw.alk.pulse.ui.theme.Outfit
 
 @Composable
 fun CommentsScreen(navController: NavController, sharedViewModel: SharedViewModel) {
@@ -29,7 +31,6 @@ fun CommentsScreen(navController: NavController, sharedViewModel: SharedViewMode
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
     ) {
         BackButton(title = "Comments") {
             navController.popBackStack(
@@ -39,7 +40,7 @@ fun CommentsScreen(navController: NavController, sharedViewModel: SharedViewMode
         }
 
         Spacer(modifier = Modifier.height(10.dp))
-        Card(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
@@ -51,15 +52,21 @@ fun CommentsScreen(navController: NavController, sharedViewModel: SharedViewMode
             )
         }
 
-        Spacer(modifier = Modifier.height(14.dp))
-        Text("${post.comments.size} comments", style = MaterialTheme.typography.labelMedium)
+        PostDivider()
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            "${post.comments.size} Comments",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(10.dp),
+            color = Color(0xFF52565B),
+            fontFamily = Outfit
+        )
         LazyColumn() {
             items(post.comments.size) { i ->
                 val comment = post.comments[i]
-                Card(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 10.dp)
                 ) {
                     BaseUserContent(
                         textContent = comment.comment,
@@ -68,7 +75,7 @@ fun CommentsScreen(navController: NavController, sharedViewModel: SharedViewMode
                     )
                     Box(
                         modifier = Modifier
-                            .padding(10.dp)
+                            .padding(horizontal = 10.dp)
                             .fillMaxWidth()
                     ) {
                         IconButton(

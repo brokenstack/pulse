@@ -12,9 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import pw.alk.pulse.R
+import pw.alk.pulse.ui.theme.Outfit
 
 @Composable
 fun IconButton(
@@ -32,12 +35,13 @@ fun IconButton(
         Image(
             painter = painterResource(id = icon),
             contentDescription = iconDescription,
-            modifier = Modifier.size(20.dp),
+            modifier = Modifier.size(23.dp),
         )
         Text(
             title,
             modifier = Modifier.padding(horizontal = 5.dp),
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelLarge,
+            fontFamily = Outfit
         )
     }
 }
@@ -55,15 +59,18 @@ fun BackButton(title: String, onClick: () -> Unit) {
             painter = painterResource(R.drawable.ic_arrow_left),
             contentDescription = "Back Arrow",
             modifier = Modifier
-                .size(25.dp)
+                .size(20.dp)
                 .clickable {
                     onClick()
                 },
         )
         Text(
             title,
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(horizontal = 10.dp)
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier.padding(horizontal = 20.dp),
+            fontFamily = Outfit,
+            color = Color(0xFF4B556F),
+            fontSize = 22.sp
         )
     }
 

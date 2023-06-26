@@ -1,5 +1,7 @@
 package pw.alk.pulse.network
 
+import androidx.compose.runtime.Composable
+
 data class Post(
     val author_image: String,
     val author_name: String,
@@ -17,4 +19,9 @@ data class Comment(
     val user_image: String,
     val comment: String,
     val likes: Int
+)
+
+data class TabItem(
+    val title: String,
+    val screen: @Composable () -> Unit
 )

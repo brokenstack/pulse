@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,7 +22,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -44,6 +41,10 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import pw.alk.pulse.R
 import pw.alk.pulse.network.Post
+import pw.alk.pulse.ui.theme.ImageBackground
+import pw.alk.pulse.ui.theme.Outfit
+import pw.alk.pulse.ui.theme.PrimaryDark
+import pw.alk.pulse.ui.theme.SubGray
 import pw.alk.pulse.ui.theme.TagBackground
 
 @Composable
@@ -69,7 +70,7 @@ fun CardHead(name: String, subHeading: String, tag: String? = null, avatarURL: S
                     .clip(
                         CircleShape
                     )
-                    .size(48.dp),
+                    .size(50.dp),
             )
             if (painter.state is AsyncImagePainter.State.Loading) {
                 CircularProgressIndicator()
@@ -80,30 +81,44 @@ fun CardHead(name: String, subHeading: String, tag: String? = null, avatarURL: S
             modifier = Modifier
                 .padding(horizontal = 10.dp)
         ) {
-            Text(
-                text = name,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Medium
-            )
-            Text(text = subHeading, style = MaterialTheme.typography.bodySmall)
-        }
-        if (tag != null) {
-            Spacer(modifier = Modifier.width(3.dp))
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = TagBackground,
-                        shape = RoundedCornerShape(5.dp)
-                    ),
+            Row(
+                modifier = Modifier.padding(vertical = 3.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    tag, modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(6.dp),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.Black
+                    text = name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium,
+                    color = PrimaryDark
                 )
+
+                if (tag != null) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = TagBackground,
+                                shape = RoundedCornerShape(5.dp)
+                            ),
+                    ) {
+                        Text(
+                            tag.uppercase(),
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(8.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                }
+
             }
+            Text(
+                text = subHeading,
+                style = MaterialTheme.typography.bodySmall,
+                fontFamily = Outfit,
+                color = SubGray
+            )
         }
 
         Spacer(
@@ -114,9 +129,7 @@ fun CardHead(name: String, subHeading: String, tag: String? = null, avatarURL: S
         Image(
             painter = painterResource(R.drawable.ic_menu_vertical),
             contentDescription = "Menu",
-            modifier = Modifier.clickable {
-
-            }
+            modifier = Modifier.clickable {}
         )
     }
 }
@@ -131,28 +144,20 @@ fun ImageCarousel(images: List<String>) {
     Box(
         modifier = Modifier
             .height(300.dp)
-            .padding(vertical = 10.dp)
+            .background(ImageBackground)
     ) {
-
-        Text(
-            "${pagerState.currentPage + 1}/${images.size}",
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(horizontal = 10.dp),
-            style = MaterialTheme.typography.bodySmall,
-        )
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
                 .fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 10.dp)
+//            contentPadding = PaddingValues(horizontal = 10.dp)
         ) { index ->
             SubcomposeAsyncImage(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .fillMaxSize(),
                 model = images[index],
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.FillBounds,
                 contentDescription = "Content Image"
             ) {
                 val state = painter.state
@@ -185,17 +190,16 @@ fun BaseUserContent(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-        Text(textContent, style = MaterialTheme.typography.bodyMedium)
+        Text(textContent, style = MaterialTheme.typography.bodyLarge, fontFamily = Outfit)
     }
 }
 
 @Composable
 fun PostCard(post: Post, onCommentClicked: () -> Unit) {
     val context = LocalContext.current
-    Card(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 10.dp)
     ) {
         BaseUserContent(
             author = post.author_name,
@@ -212,6 +216,7 @@ fun PostCard(post: Post, onCommentClicked: () -> Unit) {
         }
 
         // bottom buttons
+        Spacer(Modifier.height(5.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -219,12 +224,12 @@ fun PostCard(post: Post, onCommentClicked: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             IconButton(
-                title = post.likes.toString(),
+                title = post.likes.toString() + " likes",
                 icon = R.drawable.ic_heart,
                 iconDescription = "Like button",
             )
             IconButton(
-                title = post.comments.size.toString(),
+                title = post.comments.size.toString() + " comments",
                 icon = R.drawable.ic_comments,
                 iconDescription = "Comments button",
                 onClick = {
@@ -232,7 +237,7 @@ fun PostCard(post: Post, onCommentClicked: () -> Unit) {
                 }
             )
             IconButton(
-                title = "Share",
+                title = "share",
                 icon = R.drawable.ic_share,
                 iconDescription = "Share button",
                 onClick = {
