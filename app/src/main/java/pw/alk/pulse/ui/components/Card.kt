@@ -173,12 +173,13 @@ fun BaseUserContent(
     author: String,
     authorImage: String,
     postType: String? = null,
-    textContent: String
+    textContent: String,
+    subHeading: String = "Public"
 ) {
     Column(modifier = Modifier.padding(10.dp)) {
         CardHead(
             name = author,
-            subHeading = "2 hours ago",
+            subHeading = subHeading,
             tag = postType,
             avatarURL = authorImage
         )
@@ -200,7 +201,8 @@ fun PostCard(post: Post, onCommentClicked: () -> Unit) {
             author = post.author_name,
             authorImage = post.author_image,
             postType = post.post_type,
-            textContent = post.text
+            textContent = post.text,
+            subHeading = post.postedOn
         )
 
         if (post.attachment_type == "image") {

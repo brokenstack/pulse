@@ -8,7 +8,8 @@ data class Post(
     val text: String,
     val attachment_type: String,
     val attachments: List<String>,
-    val comments: List<Comment>
+    val comments: List<Comment>,
+    val postedOn: String
 )
 
 data class Comment(

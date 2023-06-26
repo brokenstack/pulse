@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pw.alk.pulse.network.Post
 import pw.alk.pulse.network.getPosts
@@ -47,7 +48,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun loadNextItems() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             paginator.loadNextPosts()
         }
     }

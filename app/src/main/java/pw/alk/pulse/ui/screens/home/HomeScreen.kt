@@ -33,8 +33,8 @@ import pw.alk.pulse.ui.theme.Pink
 @Composable
 fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val viewModel = viewModel<HomeViewModel>()
-    val state = viewModel.state
     val context = LocalContext.current
+    val state = viewModel.state
 
     Column(
         modifier = Modifier
@@ -68,7 +68,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
         }
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(state.posts.size) { i ->
+            items(count = state.posts.size) { i ->
                 val post = state.posts[i]
                 if (i >= state.posts.size - 1 && !state.endReached && !state.isLoading) {
                     viewModel.loadNextItems()
